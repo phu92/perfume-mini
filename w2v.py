@@ -37,29 +37,28 @@ col_p = ["향","유사도"]
 pd_df = pd.DataFrame(model2_result, columns=col_p)
 
 st.write(pd_df.head(20))
-#================================향수 추천===============================
+#============================향수 추천==============================
 data = pd.read_csv('perfume.csv')
+data['accords'].replace('', np.nan, inplace=True)
+accords = data['accords'].dropna()
 
-# def fun():
-#   st.write('버튼을 눌렀습니다')
-#   return
-
-# if st.button('Next'):
-#   fun()
 perfume_list = []
 def perfum_title(scent):
-  for i in range(1000):
-    data_split = data['accords'][i].split(',')
-    for split_scent in data_split:
-      if split_scent == scent:
-        perfume_list.append(data['title'][i])
+  for i in range(51211):
+    try:
+      data_split = accords[i].split(',')
+      for split_scent in data_split:
+        if split_scent == scent:
+          perfume_list.append(data['title'][i])
+    except:
+      pass
   return perfume_list
         
 scent2 = perfum_title(scent)
 st.write("선택한 노트가 들어간 향수를 볼 수 있습니다.")
 # st.write(scent2[:10])
 
-#=========스트림릿 버튼==========
+#=======================스트림릿 버튼========================
 ss = SessionState.get(x=0)
 
 def minus_clicks():
@@ -83,12 +82,12 @@ if st.button("10개씩 보기"):
 
 if ss.x >= 2:
   if st.button(label="이전 목록", on_click=minus_clicks):
-    st.write("10개씩 보기를 다시 누르면 이전 목록으로 이동")
+    st.write(f"10개씩 보기를 누르면 {ss.x}페이지로 이동합니다")
     ss.x = ss.x - 1      
 
 # st.button(label="이전 목록", on_click=minus_clicks)
 
-#=================스트림릿 리셋=================
+#=====================스트림릿 리셋=======================
 st.button(label = '1페이지로 이동', on_click=reset_clicks)
 
 
